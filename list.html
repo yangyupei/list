@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width,
+initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="css/ba.css">
+    <link rel="stylesheet" href="icons/iconfont.css">
+    <link rel="stylesheet" href="swiper/swiper-3.3.1.min.css">
+    <link rel="stylesheet" href="swiper/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="css/list.css"/>
+    <script src="swiper/swiper.animate1.0.2.min.js"></script>
+	<script src="js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/zepto.js"></script>
+    <script src="js/touch.min.js"></script>
+
+    <script src="swiper/swiper-3.3.1.jquery.min.js"></script>
+    <script>window.PointerEvent = void 0</script>
+
+    <script src="js/iscroll.js" type="text/javascript" charset="utf-8"></script>
+  <style type="text/css">
+  	body,html,section{width:100%;height:100%}
+  	body{display:flex;flex-direction: column;}
+  	.neirong{
+  		flex: 1;overflow: hidden;}
+  	}
+  	
+  </style>
+     
+<body>
+<header>
+		<p class="pp">新品上市</p>	
+		<input type="button" id="btn" value="购物车"/>
+</header>
+	<div class=".nav">
+		<ul class="ul">
+			
+		</ul>
+	</div>
+<section>
+	<div class="neirong">
+
+	</div>
+	
+</section>
+<footer class="foot">
+        <ul>
+            <li><a href="index.html"><span class="iconfont">&#xe644;</span>首页</a></li>
+            <li><a href=""><span class="iconfont">&#xe692;</span>分类</a></li>
+            <li><a href=""><span class="iconfont">&#xe61b;</span>购物车</a></li>
+            <li><a href=""><span class="iconfont">&#xe646;</span>我的秀</a></li>
+            <li><a href=''><span class="iconfont">&#xe651;</span>更多</a></li>
+        </ul>
+    </footer>
+</body>
+<script>
+	var txt="";
+	function getListIcon(){
+		$.ajax({
+			type:"get",
+			url:" http://datainfo.duapp.com/shopdata/getclass.php",
+			
+			dataType:"json",
+			success:function(data){
+				for(var i in data){
+//					console.log(data[i].icon)
+					txt+="<li class='a iconfont'>"+data[i].icon+"</li>"
+					//console.log(txt)
+				}
+				
+				$(".ul").html(txt)
+				$(".a").on("tap",function(){
+				
+					var num=$(this).index()
+					
+					getListData(num)
+				})
+				
+			}
+		})
+	}
+	getListIcon();
+	
+	
+	function getListData(ID){
+		$.ajax({
+			type:"get",
+			url:" http://datainfo.duapp.com/shopdata/getGoods.php",
+			data:{classID:ID},
+		
+			dataType:"jsonp",
+			success:function(data){
+				console.log(data)
+				var txt1="";
+				
+				for(var i in data){
+//					console.log(data[i].className)
+					txt1+='<div class="n1"><div class="probox"><div class="imgbox"><img src="'+data[i].goodsListImg+'"></div><div class="proname">'+data[i].goodsName+'</div><div class="goodsID"><span>'+data[i].price*data[i].discount+'</span><del>'+data[i].price+'</del></div></div></div>'
+				}
+				$(".neirong").html(txt1)
+				$('.n1').on("tap",function(){
+                    	var num=$(this).index()
+                    	console.log(num);
+                    	console.log($(this));
+                    	console.log(data[num]["goodsID"])
+                        window.location.href = "detail.html?goodsID="+data[num]["goodsID"]
+                    })
+					var myScroll=new IScroll("section")
+					myScroll.refresh()
+			}
+		})
+	}
+//	getListData()
+	$.ajax({
+		type:"get",
+		url:"http://1.twolimian.applinzi.com/echo.php",
+		datatype:"jsonp",
+		async:true,
+		success:function(data){
+			console.log(data)
+		}
+	});
+	
+	
+</script>
+</html>
